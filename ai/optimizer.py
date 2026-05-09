@@ -1,5 +1,4 @@
-# SLDRO - Route Optimizer Module
-# Developer: Kabir
+
 # Finds best delivery order using Nearest Neighbor algorithm
 
 import numpy as np
@@ -85,16 +84,16 @@ def optimize_all_clusters(orders, centers, vehicles):
     cluster_ids = list(set(o['cluster_id'] for o in orders))
 
     for i, cid in enumerate(cluster_ids):
-        # Get orders in this cluster
+        
         cluster_orders = [o for o in orders if o['cluster_id'] == cid]
 
-        # Optimize route for this cluster
+        
         optimized_route, total_dist = nearest_neighbor_route(cluster_orders)
 
-        # Estimate time (assume 30 km/h average speed)
+        
         estimated_time = round((total_dist / 30) * 60, 1)
 
-        # Assign vehicle (cycle through available vehicles)
+        
         vehicle = vehicles[i % len(vehicles)]
 
         results.append({
@@ -132,29 +131,29 @@ def print_optimized_routes(results):
 if __name__ == "__main__":
     print("--- Running Route Optimizer ---")
 
-    # Step 1: Fetch orders from database
+   
     orders = fetch_pending_orders()
 
     if not orders:
         print("No pending orders found.")
     else:
-        # Step 2: Cluster orders by location
+        
         orders, centers = cluster_orders(orders, n_clusters=3)
 
-        # Step 3: Define available vehicles
+        
         vehicles = [
             {"id": 1, "plate": "ABC-123", "type": "bike"},
             {"id": 2, "plate": "XYZ-456", "type": "van"},
             {"id": 3, "plate": "LMN-789", "type": "truck"}
         ]
 
-        # Step 4: Optimize routes per cluster
+        
         results = optimize_all_clusters(orders, centers, vehicles)
 
-        # Step 5: Print results
+       
         print_optimized_routes(results)
 
-        # Step 6: Save routes to database
+        
         print("\n--- Saving Routes to Database ---")
         for r in results:
             save_route(
